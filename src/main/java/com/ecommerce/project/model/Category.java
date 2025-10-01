@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,12 +19,20 @@ import java.util.List;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long  categoryId;
+    @Column(name = "category_id")
+    private Long categoryId;
 
     @NotBlank
-    @Size(min = 5, message = "Category name must contain atleast 5 character")
+    @Size(min = 5, message = "Category name must contain at least 5 characters")
+    @Column(name = "category_name", nullable = false)
     private String categoryName;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    List<Product> products;
+    @OneToMany(mappedBy = "category",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            orphanRemoval = true)
+    private List<Product> products = new ArrayList<>();
+
+    public Category(String categoryName) {
+        this.categoryName = categoryName;
+    }
 }
