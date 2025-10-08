@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -54,6 +57,11 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", foreignKey = @ForeignKey(name = "FK_PRODUCT_USER"))
     private User user;
+
+    @OneToMany(mappedBy = "product",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            fetch = FetchType.EAGER)
+    private List<CartItems> products = new ArrayList<>();
 
     public Product(String productName, String description, Integer quantity, double price, double discount, Category category, User user) {
         this.productName = productName;

@@ -9,13 +9,19 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> methodArgumentNotValidException(MethodArgumentNotValidException e){
+        logger.info("Handling MethodArgumentNotValidException: {}", e.getMessage());
         Map<String, String> response = new HashMap<>();
         e.getBindingResult().getAllErrors().forEach( err -> {
             String fieldName = ((FieldError) err).getField();
@@ -28,6 +34,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<APIResponse> resourceNotFoundException (ResourceNotFoundException e){
+        logger.info("Handling ResourceNotFoundException: {}", e.getMessage());
         String message = e.getMessage();
         APIResponse apiResponse = new APIResponse(message, false);
         return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
@@ -35,6 +42,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(APIException.class)
     public ResponseEntity<APIResponse> apiException(APIException e){
+        logger.info("Handling APIException: {}", e.getMessage());
         String message = e.getMessage();
         APIResponse apiResponse = new APIResponse(message, false);
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
@@ -42,6 +50,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<APIResponse> responseStatusException(ResponseStatusException e){
+        logger.info("Handling ResponseStatusException: {}", e.getMessage());
         String message = e.getMessage();
         APIResponse apiResponse = new APIResponse(message, false);
         return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);

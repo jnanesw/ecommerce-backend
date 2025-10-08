@@ -8,6 +8,8 @@ import com.ecommerce.project.payload.ProductDTO;
 import com.ecommerce.project.payload.ProductResponse;
 import com.ecommerce.project.repo.CategoryRepo;
 import com.ecommerce.project.repo.ProductRepo;
+import com.ecommerce.project.util.AuthUtil;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,9 +22,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class ProductServiceImpl implements ProductService{
+    private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+
     @Autowired
     private CategoryRepo categoryRepo;
 
@@ -35,10 +41,15 @@ public class ProductServiceImpl implements ProductService{
     @Autowired
     private FileService fileService;
 
+    @Autowired
+    private AuthUtil authUtil;
+;
+
     @Value("${project.image}")
     String filePath;
 
     public ProductResponse getAllProducts(int pageSize, int pageNumber, String sortBy, String sortOrder){
+        logger.info("Fetching all products with pageSize={}, pageNumber={}, sortBy={}, sortOrder={}", pageSize, pageNumber, sortBy, sortOrder);
         Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
                 ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
@@ -80,7 +91,11 @@ public class ProductServiceImpl implements ProductService{
 
         product.setImage("default.png");
         product.setCategory(category);
-        product.setSpecialPrice( productDTO.getPrice() - ((product.getDiscount() * 0.01)) * (product.getPrice()));
+        product.setUser(authUtil.loggedInUser());
+        // product.setDiscount(productDTO.getDiscount());
+        double specialPrice = product.getPrice() -
+                    ((product.getDiscount() * 0.01) * product.getPrice());
+        product.setSpecialPrice(specialPrice);
 
         Product savedProduct = productRepo.save(product);
         return modelMapper.map(savedProduct, ProductDTO.class);

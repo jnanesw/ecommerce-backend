@@ -13,16 +13,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
+    private static final Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
     @Autowired
     private CategoryRepo categoryRepo;
     @Autowired
     private ModelMapper modelMapper;
     @Override
     public CategoryResponse getAllCategories(int pageSize, int pageNumber, String sortBy, String sortOrder) {
+        logger.info("Fetching all categories with pageSize={}, pageNumber={}, sortBy={}, sortOrder={}", pageSize, pageNumber, sortBy, sortOrder);
         Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
                 ? Sort.by(sortBy).ascending() :
                   Sort.by(sortBy).descending();

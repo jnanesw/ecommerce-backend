@@ -12,15 +12,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
 @Table(name = "carts")
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Cart{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -19,7 +19,7 @@ import java.util.Date;
 
 @Component
 public class JwtUtils {
-    private static final Logger log = LoggerFactory.getLogger(JwtUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
     @Value("${spring.app.jwtSecret}")
     private String secretKey;
     @Value("${spring.app.jwtExpirationMs}")
@@ -30,7 +30,7 @@ public class JwtUtils {
     // Getting token from Headers
     public String getTokenFromHeaders(HttpServletRequest request){
         String token = request.getHeader("Authorization");
-        log.debug("Authorization token: {}", token);
+        logger.info("Authorization token: {}", token);
         if(token != null && token.startsWith("Bearer")){
             return token.substring(7);
         }
@@ -91,13 +91,13 @@ public class JwtUtils {
             Jwts.parser().verifyWith((SecretKey) key()).build().parseSignedClaims(authToken);
             return true;
         } catch (MalformedJwtException e) {
-            log.error("Invalid JWT token: {}", e.getMessage());
+            logger.info("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
-            log.error("JWT token is expired: {}", e.getMessage());
+            logger.info("JWT token is expired: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            log.error("JWT token is unsupported: {}", e.getMessage());
+            logger.info("JWT token is unsupported: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty: {}", e.getMessage());
+            logger.info("JWT claims string is empty: {}", e.getMessage());
         }
         return false;
     }

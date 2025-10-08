@@ -24,7 +24,7 @@ public class AuthTokenFilter     extends OncePerRequestFilter {
     private UserDetailsServiceImpl userDetailsService;
     @Autowired
     private JwtUtils jwtUtils;
-    private final static Logger log = LoggerFactory.getLogger(AuthTokenFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -32,7 +32,7 @@ public class AuthTokenFilter     extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        log.debug("AuthTokenFilter called for URI: {}", request.getRequestURI());
+        logger.info("AuthTokenFilter called for URI: {}", request.getRequestURI());
 
         try {
             String token = parseJwt(request);
@@ -59,10 +59,10 @@ public class AuthTokenFilter     extends OncePerRequestFilter {
 
                 // 5. Set authentication in SecurityContext
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.debug("Roles from JWT: {}", userDetails.getAuthorities());
+                logger.info("Roles from JWT: {}", userDetails.getAuthorities());
             }
-        } catch(Exception e){
-            log.error("Cannot set user Authentication: {}", e);
+        } catch (Exception e) {
+            logger.info("Cannot set user Authentication: {}", e.getMessage());
         }
 
         // 6. Continue the filter chain
@@ -71,7 +71,7 @@ public class AuthTokenFilter     extends OncePerRequestFilter {
 
     public String parseJwt(HttpServletRequest request){
         String jwt = jwtUtils.getJwtFromCookie(request);
-        log.debug("Parsing token from cookie");
+        logger.info("Parsing token from cookie");
         return jwt;
     }
 }
