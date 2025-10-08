@@ -6,7 +6,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,10 +16,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "carts_items")
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartItems {
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cartItemsId;
+    private Long cartItemId;
 
     @ManyToOne
     @JoinColumn(name = "cart_id")

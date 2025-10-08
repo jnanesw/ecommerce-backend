@@ -2,6 +2,7 @@ package com.ecommerce.project.controller;
 
 import com.ecommerce.project.model.Cart;
 import com.ecommerce.project.payload.CartDTO;
+import com.ecommerce.project.payload.CartItemDTO;
 import com.ecommerce.project.service.CartServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,12 @@ public class CartController {
 
     @Autowired
     private CartServiceImpl cartService;
+
+    @PostMapping("/cart/create")
+    public ResponseEntity<String> createOrUpdateCart(@RequestBody List<CartItemDTO> cartItems){
+        String response = cartService.createOrUpdateCartWithItems(cartItems);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 
     @PostMapping("/carts/products/{productId}/quantity/{quantity}")
     public ResponseEntity<CartDTO> addProductToCart(@PathVariable Long productId, @PathVariable Integer quantity){
@@ -47,4 +54,11 @@ public class CartController {
 
         return new ResponseEntity<>(cartDTO, HttpStatus.OK);
     }
+
+    @DeleteMapping("/carts/{cartId}/product/{productId}")
+    public ResponseEntity<String> deleteProductFromCart(@PathVariable Long cartId, @PathVariable Long productId){
+        String status = cartService.deleteProductFromCart(cartId, productId);
+        return new ResponseEntity<String>(status, HttpStatus.OK);
+    }
+
 }

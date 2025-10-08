@@ -61,7 +61,7 @@ public class Product {
     @OneToMany(mappedBy = "product",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             fetch = FetchType.EAGER)
-    private List<CartItems> products = new ArrayList<>();
+    private List<CartItem> products = new ArrayList<>();
 
     public Product(String productName, String description, Integer quantity, double price, double discount, Category category, User user) {
         this.productName = productName;
