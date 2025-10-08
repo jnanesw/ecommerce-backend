@@ -31,9 +31,9 @@ public class CategoryServiceImpl implements CategoryService {
         Page<Category> categoryPage = categoryRepo.findAll(pageDetails);
 
         List<Category> categories = categoryPage.getContent();
-        if(categories.isEmpty()){
-            throw new APIException("No Category created till now.");
-        }
+        // if(categories.isEmpty()){
+        //     throw new APIException("No Category created till now.");
+        // }
         List<CategoryDTO> categoryDTOS = categories.stream()
                 .map(category -> modelMapper.map(category, CategoryDTO.class))
                 .toList();

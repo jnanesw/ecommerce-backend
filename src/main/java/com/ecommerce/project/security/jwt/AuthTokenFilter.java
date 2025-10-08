@@ -1,5 +1,7 @@
 package com.ecommerce.project.security.jwt;
 
+import com.ecommerce.project.security.services.UserDetailsImpl;
+import com.ecommerce.project.security.services.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,8 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,9 +19,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-public class AuthTokenFilter extends OncePerRequestFilter {
+public class AuthTokenFilter     extends OncePerRequestFilter {
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
     @Autowired
     private JwtUtils jwtUtils;
     private final static Logger log = LoggerFactory.getLogger(AuthTokenFilter.class);
@@ -41,7 +42,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 String username = jwtUtils.getUsernameFromJwtToken(token);
 
                 // 2. Load user details from DB/UserDetailsService
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(username);
 
                 // 3. Create Authentication object with authorities
                 UsernamePasswordAuthenticationToken authentication =
@@ -69,11 +70,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     }
 
     public String parseJwt(HttpServletRequest request){
-        String headerAuth = request.getHeader("Authorization");
-        log.debug("Parsing token from headers");
-        if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7);
-        }
-        return null;
+        String jwt = jwtUtils.getJwtFromCookie(request);
+        log.debug("Parsing token from cookie");
+        return jwt;
     }
 }
