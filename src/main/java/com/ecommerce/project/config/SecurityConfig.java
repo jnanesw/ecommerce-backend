@@ -80,7 +80,16 @@ public class SecurityConfig {
                                 .requestMatchers("/api/seller/**").hasAnyRole("ADMIN","SELLER")
                                 //.requestMatchers("/api/admin/**").permitAll()
                                 .requestMatchers("/api/public/**").permitAll()
-                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers(
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui.html",
+                                        "/swagger-ui/**",
+                                        "/swagger-resources/**",
+                                        "/webjars/**",
+                                        "/context-path/swagger-ui.html",
+                                        "/context-path/swagger-ui/**",
+                                        "/context-path/v3/api-docs/**"
+                                ).permitAll()
                                 .requestMatchers("/api/test/**").permitAll()
                                 .requestMatchers("/images/**").permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

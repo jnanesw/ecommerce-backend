@@ -32,7 +32,8 @@ public class AuthTokenFilter     extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        logger.info("AuthTokenFilter called for URI: {}", request.getRequestURI());
+        String path = request.getRequestURI();
+        logger.info("AuthTokenFilter called for URI: {}", path);
 
         try {
             String token = parseJwt(request);
