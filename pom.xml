@@ -144,4 +144,14 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>production</id>
+			<properties>
+				<skipTests>true</skipTests>
+			</properties>
+		</profile>
+	</profiles>
+
+
 </project>
