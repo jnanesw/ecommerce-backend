@@ -26,13 +26,15 @@ public class ProductController {
 
     @GetMapping("/public/products")
     public ResponseEntity<ProductResponse> getAllProducts(
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "category", required = false) String category,
             @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE) int pageSize,
             @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER) int pageNumber,
             @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_PRODUCTS_BY) String sortBy,
             @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_ORDER) String sortOrder
     ){
         logger.info("Fetching all products");
-        ProductResponse productResponse =  productService.getAllProducts(pageSize, pageNumber, sortBy, sortOrder);
+        ProductResponse productResponse =  productService.getAllProducts(pageSize, pageNumber, sortBy, sortOrder, keyword, category);
         return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }
 
