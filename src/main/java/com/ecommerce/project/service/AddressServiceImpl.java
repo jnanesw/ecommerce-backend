@@ -33,6 +33,7 @@ public class AddressServiceImpl implements AddressService{
     public AddressDTO createAddress(AddressDTO addressDTO) {
         Address address = modelMapper.map(addressDTO, Address.class);
         User user = authUtil.loggedInUser();
+        System.out.println("Creating address for user: " + user);
         address.setUser(user);
 
         List<Address> addressList = user.getAddresses();
@@ -46,9 +47,9 @@ public class AddressServiceImpl implements AddressService{
     @Override
     public List<AddressDTO> getAddresses(){
         User user = authUtil.loggedInUser();
+        // System.out.println("User Addresses: " + user.getAddresses());
         return user.getAddresses().stream().map(address ->
                 modelMapper.map(address, AddressDTO.class)).toList();
-
     }
 
     @Override

@@ -33,6 +33,8 @@ public class JwtUtils {
         logger.info("Authorization token: {}", token);
         if(token != null && token.startsWith("Bearer")){
             return token.substring(7);
+        }else if(token != null){
+            return token;
         }
 
         return null;
@@ -53,6 +55,7 @@ public class JwtUtils {
                 .path("/api")
                 .maxAge(24*60*60)
                 .httpOnly(false)
+                .secure(false)
                 .build();
     }
     public ResponseCookie getCleanJwtCookie() {

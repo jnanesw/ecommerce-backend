@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService{
         Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
                 ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
-        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+        Pageable pageDetails = PageRequest.of(pageNumber-1, pageSize, sortByAndOrder);
         Specification<Product> spec = Specification.where(null);
         if (keyword != null && !keyword.isEmpty()) {
             spec = spec.and((root, query, criteriaBuilder) ->
