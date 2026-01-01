@@ -4,7 +4,6 @@ import com.ecommerce.project.payload.OrderDTO;
 import com.ecommerce.project.payload.OrderRequestDTO;
 import com.ecommerce.project.payload.StripePaymentDTO;
 import com.ecommerce.project.service.OrderService;
-import com.ecommerce.project.service.StripeService;
 import com.ecommerce.project.service.StripeServiceImpl;
 import com.ecommerce.project.util.AuthUtil;
 import com.stripe.exception.StripeException;
@@ -24,7 +23,7 @@ public class OrderController {
     private OrderService orderService;
 
     @Autowired
-    private StripeService stripeService;
+    private StripeServiceImpl stripeService;
 
     @PostMapping("/order/users/payments/{paymentMethod}")
     public ResponseEntity<OrderDTO> orderProducts(@PathVariable String paymentMethod, @RequestBody OrderRequestDTO orderRequestDTO){
